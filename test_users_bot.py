@@ -20,7 +20,7 @@ main_menu_reply_markup.row(
 )
 # второй ряд кнопок
 main_menu_reply_markup.row(
-    types.KeyboardButton(text="⟦5⟧"), types.KeyboardButton(text="⟦1⟧⟦0⟧")
+    types.KeyboardButton(text="⟦5⟧"), types.KeyboardButton(text="⟦1⟧⟦0⟧"), types.KeyboardButton(text="для настроения")
 )
 
 # обработчик команды '/start'
@@ -50,6 +50,8 @@ def message_handler(message: types.Message):
         payload_len = 5
     elif message.text == "⟦1⟧⟦0⟧":
         payload_len = 10
+    elif message.text == 'для настроения':
+            bot.send_message(message.chat.id, 'https://i.gifer.com/7kFr.gif')
     else:
         bot.send_message(chat_id=message.chat.id, text="Выбери одно из предлагаемых чисел! 😿")
         return
