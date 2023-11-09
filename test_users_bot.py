@@ -1,33 +1,31 @@
-# подключение библиотек
+
 import json
 from secrets import token_urlsafe
 
 from faker import Faker
 from telebot import TeleBot, types
 
-# TODO: вставить свой токен
+# TODO: 
 TOKEN = '6829267222:AAHO-kCpCl8Hmc7yvl2Bdh3qyvZPr5a7o0o'
 bot = TeleBot(TOKEN, parse_mode='html')
-# библиотека для генерации тестовых ФИО
-# указываем язык - русский
+
 faker = Faker('ru_RU') 
 
-# объект клавиаутры
+
 main_menu_reply_markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-# первый ряд кнопок
+
 main_menu_reply_markup.row(
     types.KeyboardButton(text=" ⟦1⟧ "), types.KeyboardButton(text="⟦2⟧")
 )
-# второй ряд кнопок
+
 main_menu_reply_markup.row(
     types.KeyboardButton(text="⟦5⟧"), types.KeyboardButton(text="⟦1⟧⟦0⟧"), types.KeyboardButton(text="для настроения")
 )
 
-# обработчик команды '/start'
+ '/start'
 @bot.message_handler(commands=['start'])
 def start_message_handler(message: types.Message):
-    # отправляем ответ на команду '/start'
-    # не забываем прикрепить объект клавиатуры к сообщению
+   
     sti = open('welcome.webp', 'rb')
     bot.send_sticker(message.chat.id, sti)
     bot.send_message(
@@ -37,11 +35,10 @@ def start_message_handler(message: types.Message):
         reply_markup=main_menu_reply_markup)
 
 
-# обработчик всех остальных сообщений
+
 @bot.message_handler()
 def message_handler(message: types.Message):
-    # определяем количество тестовых пользователей
-    # или отправляем ошибку
+  
     payload_len = 0
     if message.text == "⟦1⟧":
         payload_len = 1
@@ -57,17 +54,16 @@ def message_handler(message: types.Message):
         bot.send_message(chat_id=message.chat.id, text="Выбери одно из предлагаемых чисел! 😿")
         return
 
-    # генерируем тестовые данные для выбранного количества пользователей
-    # при помощи метода simple_profile
+    
     total_payload = []
     for _ in range(payload_len):
         user_info = faker.simple_profile()
         user_info['phone'] = f'+7{faker.msisdn()[3:]}'
-        # при помощи библиотеки secrets генерируем пароль
+        
         user_info['password'] = token_urlsafe(10)
         total_payload.append(user_info)
 
-    # сериализуем данные в строку
+   
     payload_str = json.dumps(
         obj=total_payload,
         indent=2,
@@ -76,7 +72,7 @@ def message_handler(message: types.Message):
         default=str
     )
 
-    # отправляем результат
+  
     bot.send_message(
         chat_id=message.chat.id,
         text=f"Данные {payload_len} тестовых пользователей:\n<code>"\
@@ -89,9 +85,9 @@ def message_handler(message: types.Message):
     )
     
 
-# главная функция программы
+
 def main():
-    # запускаем нашего бота
+  
     bot.infinity_polling()
 
 
