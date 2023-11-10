@@ -6,7 +6,7 @@ from faker import Faker
 from telebot import TeleBot, types
 
 # TODO: 
-TOKEN = '6829267222:AAHO-kCpCl8Hmc7yvl2Bdh3qyvZPr5a7o0o'
+
 bot = TeleBot(TOKEN, parse_mode='html')
 
 faker = Faker('ru_RU') 
